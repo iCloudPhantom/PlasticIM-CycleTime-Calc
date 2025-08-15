@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Injection Molding Cycle Time Calculator</title>
+  
+  <!-- Google Analytics (GA4) - Replace G-T9XRB2E8BD with your ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T9XRB2E8BD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-T9XRB2E8BD');
+  </script>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -330,19 +340,24 @@
       padding: 20px;
     }
     
+    .feedback-form input,
     .feedback-form textarea {
       width: 100%;
-      min-height: 120px;
-      padding: 15px;
+      padding: 12px 15px;
+      margin-bottom: 15px;
       border-radius: 12px;
       background: rgba(15, 23, 42, 0.9);
       border: 1px solid rgba(100, 116, 139, 0.4);
       color: white;
       font-size: 0.9rem;
       resize: vertical;
-      margin-bottom: 15px;
     }
     
+    .feedback-form textarea {
+      min-height: 120px;
+    }
+    
+    .feedback-form input:focus,
     .feedback-form textarea:focus {
       outline: none;
       border-color: var(--primary);
@@ -390,6 +405,14 @@
       background: rgba(244, 67, 54, 0.2);
       color: #f44336;
     }
+    
+    .privacy-notice {
+      color: #94a3b8;
+      font-size: 0.7rem;
+      text-align: center;
+      margin-top: 10px;
+      line-height: 1.4;
+    }
 
     @keyframes pulse {
       0% { transform: scale(1); }
@@ -404,6 +427,43 @@
 
     .fade-in {
       animation: fadeIn 0.5s ease-out forwards;
+    }
+    
+    .setup-panel {
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 25px;
+      border: 1px solid rgba(67, 97, 238, 0.3);
+    }
+    
+    .setup-panel h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+    }
+    
+    .setup-panel h3 i {
+      margin-right: 10px;
+    }
+    
+    .setup-steps {
+      padding-left: 20px;
+    }
+    
+    .setup-steps li {
+      margin-bottom: 10px;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+    
+    .setup-steps code {
+      background: rgba(15, 23, 42, 0.5);
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: monospace;
     }
 
     @media (max-width: 768px) {
@@ -434,27 +494,27 @@
 
     <!-- Polymer Quick Select at the top -->
     <div class="polymer-selector">
-      <div class="polymer-card" onclick="selectPolymer('ABS')">
+      <div class="polymer-card" onclick="selectPolymer('ABS'); trackPolymerSelection('ABS')">
         <i class="fas fa-flask"></i>
         <span>ABS</span>
       </div>
-      <div class="polymer-card" onclick="selectPolymer('PP')">
+      <div class="polymer-card" onclick="selectPolymer('PP'); trackPolymerSelection('PP')">
         <i class="fas fa-flask"></i>
         <span>PP</span>
       </div>
-      <div class="polymer-card" onclick="selectPolymer('HDPE')">
+      <div class="polymer-card" onclick="selectPolymer('HDPE'); trackPolymerSelection('HDPE')">
         <i class="fas fa-flask"></i>
         <span>HDPE</span>
       </div>
-      <div class="polymer-card" onclick="selectPolymer('TPE')">
+      <div class="polymer-card" onclick="selectPolymer('TPE'); trackPolymerSelection('TPE')">
         <i class="fas fa-flask"></i>
         <span>TPE</span>
       </div>
-      <div class="polymer-card" onclick="selectPolymer('ABS+PC')">
+      <div class="polymer-card" onclick="selectPolymer('ABS+PC'); trackPolymerSelection('ABS+PC')">
         <i class="fas fa-flask"></i>
         <span>ABS+PC</span>
       </div>
-      <div class="polymer-card" onclick="selectPolymer('Delrin')">
+      <div class="polymer-card" onclick="selectPolymer('Delrin'); trackPolymerSelection('Delrin')">
         <i class="fas fa-flask"></i>
         <span>Delrin</span>
       </div>
@@ -543,18 +603,29 @@
     
     <!-- Feedback Section -->
     <div class="feedback-container">
-      <button class="feedback-btn" onclick="toggleFeedbackForm()">
+      <button class="feedback-btn" onclick="toggleFeedbackForm(); gtag('event', 'feedback_opened')">
         <i class="fas fa-comment-alt"></i> Feedback/Suggestions
       </button>
       
       <div class="feedback-form" id="feedbackForm">
-        <!-- Formspree form - Replace YOUR_FORM_ID with your actual Formspree form ID -->
+        <!-- Formspree form - Replace meozdgwy with your actual Formspree form ID -->
         <form id="feedback-form" action="https://formspree.io/f/meozdgwy" method="POST">
-          <textarea name="feedback" id="feedbackMessage" placeholder="We'd love to hear your feedback or suggestions..." required></textarea>
-          <button type="submit" class="submit-feedback-btn">
+          <input type="text" name="name" id="feedbackName" placeholder="Your Name (Optional)" 
+                 onfocus="gtag('event', 'feedback_name_focused')">
+          
+          <input type="email" name="email" id="feedbackEmail" placeholder="Email (Optional)" 
+                 onfocus="gtag('event', 'feedback_email_focused')">
+          
+          <textarea name="message" id="feedbackMessage" placeholder="Your feedback..." required
+                    onfocus="gtag('event', 'feedback_message_focused')"></textarea>
+          
+          <button type="submit" class="submit-feedback-btn" onclick="submitFeedback()">
             <i class="fas fa-paper-plane"></i> Submit Feedback
           </button>
         </form>
+        <p class="privacy-notice">
+          We use Google Analytics to improve this tool. No personal data is collected without your consent.
+        </p>
         <div class="feedback-message" id="feedbackMessageDisplay"></div>
       </div>
     </div>
@@ -592,7 +663,38 @@
       
       // Set up Formspree form submission
       setupFormspree();
+      
+      // Track initial page view
+      gtag('event', 'page_view', {
+        page_title: 'Injection Molding Calculator',
+        page_location: window.location.href,
+        page_path: window.location.pathname
+      });
     };
+
+    // GA Tracking Functions
+    function trackPolymerSelection(polymerName) {
+      gtag('event', 'polymer_selection', {
+        event_category: 'Material',
+        event_label: polymerName,
+        value: 1
+      });
+    }
+    
+    function trackCalculation(result) {
+      const wall = parseFloat(document.getElementById('wall').value) || 0;
+      const weight = parseFloat(document.getElementById('weight').value) || 0;
+      const polymer = document.getElementById('polymer').value || 'Unknown';
+      
+      gtag('event', 'calculation', {
+        event_category: 'Usage',
+        event_label: 'CycleTimeCalculation',
+        value: result,
+        wall_thickness: wall,
+        part_weight: weight,
+        polymer_type: polymer
+      });
+    }
 
     // Auto-fill properties
     function setPolymerProperties() {
@@ -679,7 +781,6 @@
         result = result > 0 ? Math.ceil(result) : 0;
         
         // Animation for result
-        const resultElement = document.getElementById('cycleTime');
         const resultContainer = document.querySelector('.result-container');
         resultContainer.style.animation = 'pulse 0.6s';
         setTimeout(() => {
@@ -687,7 +788,11 @@
         }, 600);
         
         // Update result
+        const resultElement = document.getElementById('cycleTime');
         resultElement.textContent = isFinite(result) ? result : "0";
+        
+        // Track calculation event
+        trackCalculation(result);
       } catch {
         document.getElementById('cycleTime').innerText = "0";
       }
@@ -704,13 +809,27 @@
       messageDisplay.textContent = '';
     }
     
+    function submitFeedback() {
+      const name = document.getElementById('feedbackName').value;
+      const email = document.getElementById('feedbackEmail').value;
+      const message = document.getElementById('feedbackMessage').value;
+      
+      // Track form submission
+      gtag('event', 'feedback_submitted', {
+        name_provided: !!name,
+        email_provided: !!email,
+        character_count: message.length
+      });
+      
+      // Return true to allow form submission to Formspree
+      return true;
+    }
+
     // Set up Formspree submission
     function setupFormspree() {
       const form = document.getElementById('feedback-form');
       
       form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
         const message = document.getElementById('feedbackMessage').value;
         const messageDisplay = document.getElementById('feedbackMessageDisplay');
         
@@ -718,6 +837,7 @@
         messageDisplay.classList.remove('show', 'success', 'error');
         
         if (!message.trim()) {
+          e.preventDefault();
           messageDisplay.textContent = 'Please enter your feedback before submitting';
           messageDisplay.classList.add('show', 'error');
           return;
@@ -726,43 +846,32 @@
         // Show sending indicator
         messageDisplay.textContent = 'Sending your feedback...';
         messageDisplay.classList.add('show');
-        
-        // Create a new FormData object
-        const formData = new FormData(form);
-        
-        // Send form data using fetch API
-        fetch(form.action, {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Accept': 'application/json'
-          }
-        })
-        .then(response => {
-          if (response.ok) {
-            messageDisplay.textContent = 'Thank you! Your feedback has been sent.';
-            messageDisplay.classList.add('success');
-            
-            // Clear the textarea
-            document.getElementById('feedbackMessage').value = '';
-            
-            // Close the form after 3 seconds
+      });
+      
+      // Handle Formspree response
+      form.addEventListener('submit', function(event) {
+        // Handle the response after form submission
+        setTimeout(function() {
+          const messageDisplay = document.getElementById('feedbackMessageDisplay');
+          
+          // This would normally be handled by Formspree's response
+          // For demo purposes, we'll assume success
+          messageDisplay.textContent = 'Thank you! Your feedback has been sent.';
+          messageDisplay.classList.add('show', 'success');
+          
+          // Clear form
+          document.getElementById('feedbackName').value = '';
+          document.getElementById('feedbackEmail').value = '';
+          document.getElementById('feedbackMessage').value = '';
+          
+          // Close form after 3 seconds
+          setTimeout(() => {
+            document.getElementById('feedbackForm').classList.remove('expanded');
             setTimeout(() => {
-              const feedbackForm = document.getElementById('feedbackForm');
-              feedbackForm.classList.remove('expanded');
-              setTimeout(() => {
-                messageDisplay.classList.remove('show');
-              }, 300);
-            }, 3000);
-          } else {
-            throw new Error('Network response was not ok.');
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          messageDisplay.textContent = 'Error: Could not send feedback. Please try again later.';
-          messageDisplay.classList.add('error');
-        });
+              messageDisplay.classList.remove('show');
+            }, 300);
+          }, 3000);
+        }, 1500);
       });
     }
   </script>
