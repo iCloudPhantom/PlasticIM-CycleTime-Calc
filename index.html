@@ -1,879 +1,810 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Injection Molding Cycle Time Calculator</title>
-  
-  <!-- Google Analytics (GA4) - Replace G-T9XRB2E8BD with your ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T9XRB2E8BD"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-T9XRB2E8BD');
-  </script>
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Injection Molding Calculator</title>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T9XRB2E8BD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-T9XRB2E8BD');
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
-    :root {
-      --primary: #4361ee;
-      --primary-dark: #3a0ca3;
-      --secondary: #7209b7;
-      --accent: #f72585;
-      --light: #f8f9fa;
-      --dark: #0f172a;
-      --darker: #0a0f1f;
-      --success: #4ade80;
-      --warning: #fbbf24;
-      --card-bg: rgba(30, 41, 59, 0.95);
-      --input-bg: rgba(30, 41, 59, 0.8);
-      --shadow: rgba(0, 0, 0, 0.3);
-    }
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #0f172a;
+            --darker: #0a0f1f;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --card-bg: rgba(30, 41, 59, 0.95);
+            --input-bg: rgba(30, 41, 59, 0.8);
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
 
-    body {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      color: var(--light);
-      line-height: 1.5;
-    }
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--light);
+            line-height: 1.5;
+        }
 
-    .container {
-      background: var(--card-bg);
-      border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-      padding: 25px;
-      width: 100%;
-      max-width: 800px;
-      margin: 20px auto;
-      border: 1px solid rgba(100, 116, 139, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
+        .container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .container::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, transparent 70%);
-      z-index: -1;
-      animation: rotate 20s linear infinite;
-    }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
 
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
 
-    .header {
-      text-align: center;
-      margin-bottom: 15px;
-      position: relative;
-      z-index: 2;
-    }
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
 
-    .header h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      background: linear-gradient(to right, #f72585, #4361ee);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #f72585, #4361ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    .header p {
-      color: #94a3b8;
-      font-size: 0.9rem;
-      max-width: 90%;
-      margin: 0 auto;
-    }
+        .header p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            max-width: 90%;
+            margin: 0 auto;
+        }
 
-    .polymer-selector {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-      gap: 10px;
-      margin: 20px 0;
-    }
+        .polymer-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
 
-    .polymer-card {
-      background: rgba(15, 23, 42, 0.7);
-      border-radius: 12px;
-      padding: 12px 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(100, 116, 139, 0.3);
-      font-size: 0.85rem;
-    }
+        .polymer-card {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            font-size: 0.85rem;
+        }
 
-    .polymer-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
-      border-color: var(--primary);
-    }
+        .polymer-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
+        }
 
-    .polymer-card.active {
-      background: rgba(67, 97, 238, 0.2);
-      border-color: var(--primary);
-      box-shadow: 0 0 12px rgba(67, 97, 238, 0.3);
-    }
+        .polymer-card.active {
+            background: rgba(67, 97, 238, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(67, 97, 238, 0.3);
+        }
 
-    .polymer-card i {
-      font-size: 1.4rem;
-      color: var(--primary);
-      margin-bottom: 8px;
-      display: block;
-    }
+        .polymer-card i {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+        }
 
-    /* Result display below polymer buttons */
-    .result-container {
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      border: 1px solid rgba(67, 97, 238, 0.2);
-      margin: 0 0 25px 0;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
+        .result-container {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(67, 97, 238, 0.2);
+            margin: 0 0 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
 
-    .result-label {
-      font-size: 1.1rem;
-      color: #94a3b8;
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
+        .result-label {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
 
-    .result-value {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--success);
-      letter-spacing: -1px;
-      text-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
-      transition: all 0.5s ease;
-    }
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--success);
+            letter-spacing: -1px;
+            text-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
+            transition: all 0.5s ease;
+        }
 
-    .unit {
-      font-size: 1.1rem;
-      color: #94a3b8;
-      font-weight: 500;
-    }
+        .unit {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
 
-    /* Input sections side by side */
-    .input-sections {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
+        .input-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
 
-    .input-section {
-      background: rgba(15, 23, 42, 0.6);
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid rgba(100, 116, 139, 0.2);
-    }
+        .input-section {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
 
-    .input-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 15px;
-    }
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
 
-    .input-group {
-      display: flex;
-      flex-direction: column;
-    }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
 
-    .input-group label {
-      font-size: 0.85rem;
-      color: #cbd5e1;
-      margin-bottom: 6px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-    }
+        .input-group label {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
 
-    .input-group label i {
-      margin-right: 8px;
-      color: var(--primary);
-      font-size: 0.95rem;
-      width: 20px;
-      text-align: center;
-    }
+        .input-group label i {
+            margin-right: 8px;
+            color: var(--primary);
+            font-size: 0.95rem;
+            width: 20px;
+            text-align: center;
+        }
 
-    input, select {
-      width: 100%;
-      padding: 12px 15px;
-      border: none;
-      border-radius: 10px;
-      background: rgba(15, 23, 42, 0.8);
-      font-size: 0.95rem;
-      box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-      border: 1px solid rgba(100, 116, 139, 0.3);
-      color: white;
-      outline: none;
-    }
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            font-size: 0.95rem;
+            box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            color: white;
+            outline: none;
+        }
 
-    input::placeholder {
-      color: #64748b;
-    }
+        input::placeholder {
+            color: #64748b;
+        }
 
-    input:focus, select:focus {
-      border-color: var(--primary);
-      box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(67, 97, 238, 0.3);
-    }
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(67, 97, 238, 0.3);
+        }
 
-    .user-input {
-      background: rgba(15, 23, 42, 0.9);
-      border-left: 3px solid var(--primary);
-    }
+        .user-input {
+            background: rgba(15, 23, 42, 0.9);
+            border-left: 3px solid var(--primary);
+        }
 
-    .predefined-input {
-      background: rgba(15, 23, 42, 0.7);
-      border-left: 3px solid var(--secondary);
-    }
+        .predefined-input {
+            background: rgba(15, 23, 42, 0.7);
+            border-left: 3px solid var(--secondary);
+        }
 
-    .form-section {
-      margin-bottom: 15px;
-      padding-bottom: 15px;
-      border-bottom: 1px dashed rgba(100, 116, 139, 0.3);
-    }
+        .section-title {
+            font-size: 1.1rem;
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
 
-    .form-section:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
+        .section-title i {
+            margin-right: 10px;
+            background: rgba(67, 97, 238, 0.15);
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
 
-    .section-title {
-      font-size: 1.1rem;
-      color: white;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      font-weight: 600;
-    }
+        .info-text {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.5;
+        }
 
-    .section-title i {
-      margin-right: 10px;
-      background: rgba(67, 97, 238, 0.15);
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--primary);
-      font-size: 1.1rem;
-    }
-
-    .info-text {
-      color: #94a3b8;
-      font-size: 0.8rem;
-      margin-top: 20px;
-      text-align: center;
-      line-height: 1.5;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 20px;
-      color: #64748b;
-      font-size: 0.8rem;
-    }
-    
-    /* Feedback Button Styles */
-    .feedback-container {
-      margin-top: 25px;
-      text-align: center;
-    }
-    
-    .feedback-btn {
-      display: inline-flex;
-      align-items: center;
-      padding: 10px 20px;
-      background: linear-gradient(135deg, var(--secondary), var(--primary-dark));
-      color: white;
-      border: none;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3);
-    }
-    
-    .feedback-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(114, 9, 183, 0.4);
-    }
-    
-    .feedback-btn i {
-      margin-right: 8px;
-    }
-    
-    .feedback-form {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease;
-      margin-top: 15px;
-      background: rgba(15, 23, 42, 0.8);
-      border-radius: 16px;
-      padding: 0 20px;
-    }
-    
-    .feedback-form.expanded {
-      max-height: 500px;
-      padding: 20px;
-    }
-    
-    .feedback-form input,
-    .feedback-form textarea {
-      width: 100%;
-      padding: 12px 15px;
-      margin-bottom: 15px;
-      border-radius: 12px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(100, 116, 139, 0.4);
-      color: white;
-      font-size: 0.9rem;
-      resize: vertical;
-    }
-    
-    .feedback-form textarea {
-      min-height: 120px;
-    }
-    
-    .feedback-form input:focus,
-    .feedback-form textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.3);
-    }
-    
-    .submit-feedback-btn {
-      padding: 12px 25px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .submit-feedback-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(114, 9, 183, 0.4);
-    }
-    
-    .feedback-message {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s ease;
-    }
-    
-    .feedback-message.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .success {
-      background: rgba(76, 175, 80, 0.2);
-      color: #4ade80;
-    }
-    
-    .error {
-      background: rgba(244, 67, 54, 0.2);
-      color: #f44336;
-    }
-    
-    .privacy-notice {
-      color: #94a3b8;
-      font-size: 0.7rem;
-      text-align: center;
-      margin-top: 10px;
-      line-height: 1.4;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .fade-in {
-      animation: fadeIn 0.5s ease-out forwards;
-    }
-    
-    .setup-panel {
-      background: rgba(15, 23, 42, 0.8);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 25px;
-      border: 1px solid rgba(67, 97, 238, 0.3);
-    }
-    
-    .setup-panel h3 {
-      color: var(--primary);
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      font-size: 1.1rem;
-    }
-    
-    .setup-panel h3 i {
-      margin-right: 10px;
-    }
-    
-    .setup-steps {
-      padding-left: 20px;
-    }
-    
-    .setup-steps li {
-      margin-bottom: 10px;
-      font-size: 0.85rem;
-      color: #cbd5e1;
-    }
-    
-    .setup-steps code {
-      background: rgba(15, 23, 42, 0.5);
-      padding: 2px 5px;
-      border-radius: 4px;
-      font-family: monospace;
-    }
-
-    @media (max-width: 768px) {
-      .input-sections {
-        grid-template-columns: 1fr;
-      }
-      
-      .polymer-selector {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-      }
-      
-      .container {
-        padding: 20px 15px;
-      }
-      
-      .result-value {
-        font-size: 2.2rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="container fade-in">
-    <div class="header">
-      <h1>Plastic Injection Molding Cycle Time Calculator</h1>
-      <p>Results update instantly as you make changes</p>
-    </div>
-
-    <!-- Polymer Quick Select at the top -->
-    <div class="polymer-selector">
-      <div class="polymer-card" onclick="selectPolymer('ABS'); trackPolymerSelection('ABS')">
-        <i class="fas fa-flask"></i>
-        <span>ABS</span>
-      </div>
-      <div class="polymer-card" onclick="selectPolymer('PP'); trackPolymerSelection('PP')">
-        <i class="fas fa-flask"></i>
-        <span>PP</span>
-      </div>
-      <div class="polymer-card" onclick="selectPolymer('HDPE'); trackPolymerSelection('HDPE')">
-        <i class="fas fa-flask"></i>
-        <span>HDPE</span>
-      </div>
-      <div class="polymer-card" onclick="selectPolymer('TPE'); trackPolymerSelection('TPE')">
-        <i class="fas fa-flask"></i>
-        <span>TPE</span>
-      </div>
-      <div class="polymer-card" onclick="selectPolymer('ABS+PC'); trackPolymerSelection('ABS+PC')">
-        <i class="fas fa-flask"></i>
-        <span>ABS+PC</span>
-      </div>
-      <div class="polymer-card" onclick="selectPolymer('Delrin'); trackPolymerSelection('Delrin')">
-        <i class="fas fa-flask"></i>
-        <span>Delrin</span>
-      </div>
-    </div>
-
-    <!-- Result display below polymer buttons -->
-    <div class="result-container">
-      <div class="result-label">Total Cycle Time</div>
-      <div class="result-value"><span id="cycleTime">0</span> <span class="unit">seconds</span></div>
-    </div>
-
-    <!-- Input sections side by side -->
-    <div class="input-sections">
-      <div class="input-section">
-        <div class="section-title">
-          <i class="fas fa-cube"></i>
-          <span>Part Specifications</span>
-        </div>
-        <div class="input-grid">
-          <div class="input-group">
-            <label for="polymer"><i class="fas fa-vial"></i> Polymer</label>
-            <select id="polymer" onchange="setPolymerProperties()" class="user-input">
-              <option value="">-- Select Polymer --</option>
-            </select>
-          </div>
-          
-          <div class="input-group">
-            <label for="wall"><i class="fas fa-ruler-vertical"></i> Wall Thickness (mm)</label>
-            <input id="wall" type="number" step="0.01" min="0" class="user-input" placeholder="e.g. 2.5">
-          </div>
-          
-          <div class="input-group">
-            <label for="weight"><i class="fas fa-weight-hanging"></i> Part Weight (g)</label>
-            <input id="weight" type="number" step="0.01" min="0" class="user-input" placeholder="e.g. 15.2">
-          </div>
-          
-          <div class="input-group">
-            <label for="cavities"><i class="fas fa-object-group"></i> Cavity Count</label>
-            <input id="cavities" type="number" step="1" min="1" class="user-input" placeholder="e.g. 4" value="1">
-          </div>
-          
-          <div class="input-group">
-            <label for="complexity"><i class="fas fa-project-diagram"></i> Complexity</label>
-            <select id="complexity" class="user-input">
-              <option value="low">Low</option>
-              <option value="medium" selected>Medium</option>
-              <option value="high">High</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      
-      <div class="input-section">
-        <div class="section-title">
-          <i class="fas fa-fire"></i>
-          <span>Material Properties</span>
-        </div>
-        <div class="input-grid">
-          <div class="input-group">
-            <label for="diffusivity"><i class="fas fa-thermometer-half"></i> Thermal Diffusivity (mm²/s)</label>
-            <input id="diffusivity" type="number" step="0.01" class="predefined-input" placeholder="Auto-filled" readonly>
-          </div>
-          
-          <div class="input-group">
-            <label for="meltTemp"><i class="fas fa-temperature-high"></i> Melting Temp (°C)</label>
-            <input id="meltTemp" type="number" step="1" class="predefined-input" placeholder="Auto-filled" readonly>
-          </div>
-          
-          <div class="input-group">
-            <label for="moldTemp"><i class="fas fa-temperature-low"></i> Mold Temp (°C)</label>
-            <input id="moldTemp" type="number" step="1" class="predefined-input" placeholder="Auto-filled" readonly>
-          </div>
-          
-          <div class="input-group">
-            <label for="ejectTemp"><i class="fas fa-sign-out-alt"></i> Ejection Temp (°C)</label>
-            <input id="ejectTemp" type="number" step="1" class="predefined-input" placeholder="Auto-filled" readonly>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="info-text">
-      <p><i class="fas fa-sync-alt"></i> Results update automatically as you change values</p>
-      <p><i class="fas fa-lightbulb"></i> Select a polymer to auto-fill material properties</p>
-    </div>
-    
-    <!-- Feedback Section -->
-    <div class="feedback-container">
-      <button class="feedback-btn" onclick="toggleFeedbackForm(); gtag('event', 'feedback_opened')">
-        <i class="fas fa-comment-alt"></i> Feedback/Suggestions
-      </button>
-      
-      <div class="feedback-form" id="feedbackForm">
-        <!-- Formspree form - Replace meozdgwy with your actual Formspree form ID -->
-        <form id="feedback-form" action="https://formspree.io/f/meozdgwy" method="POST">
-          <input type="text" name="name" id="feedbackName" placeholder="Your Name (Optional)" 
-                 onfocus="gtag('event', 'feedback_name_focused')">
-          
-          <input type="email" name="email" id="feedbackEmail" placeholder="Email (Optional)" 
-                 onfocus="gtag('event', 'feedback_email_focused')">
-          
-          <textarea name="message" id="feedbackMessage" placeholder="Your feedback..." required
-                    onfocus="gtag('event', 'feedback_message_focused')"></textarea>
-          
-          <button type="submit" class="submit-feedback-btn" onclick="submitFeedback()">
-            <i class="fas fa-paper-plane"></i> Submit Feedback
-          </button>
-        </form>
-        <p class="privacy-notice">
-          We use Google Analytics to improve this tool. No personal data is collected without your consent.
-        </p>
-        <div class="feedback-message" id="feedbackMessageDisplay"></div>
-      </div>
-    </div>
-    
-    <div class="footer">
-      <p>sales@analyticaindia.in | Analytica India</p>
-    </div>
-  </div>
-
-  <script>
-    // Polymer data
-    const POLYMER_DATA = [
-      { name: "ABS", diffusivity: 0.13, meltTemp: 260, moldTemp: 54, ejectTemp: 84 },
-      { name: "ABS+PC", diffusivity: 0.13, meltTemp: 260, moldTemp: 54, ejectTemp: 84 },
-      { name: "PP", diffusivity: 0.09, meltTemp: 218, moldTemp: 38, ejectTemp: 70 },
-      { name: "HDPE", diffusivity: 0.13, meltTemp: 230, moldTemp: 38, ejectTemp: 70 },
-      { name: "PA 6 30% GF", diffusivity: 0.10, meltTemp: 291, moldTemp: 75, ejectTemp: 129 },
-      { name: "TPE", diffusivity: 0.09, meltTemp: 227, moldTemp: 60, ejectTemp: 88 },
-      { name: "Delrin", diffusivity: 0.09, meltTemp: 215, moldTemp: 90, ejectTemp: 167 }
-    ];
-
-    // Initialize on load
-    window.onload = function() {
-      // Populate polymer dropdown
-      const sel = document.getElementById("polymer");
-      POLYMER_DATA.forEach(p => {
-        const opt = document.createElement("option");
-        opt.value = p.name;
-        opt.textContent = p.name;
-        sel.appendChild(opt);
-      });
-      
-      // Set up event listeners for auto-calculation
-      setupAutoCalculation();
-      
-      // Set up Formspree form submission
-      setupFormspree();
-      
-      // Track initial page view
-      gtag('event', 'page_view', {
-        page_title: 'Injection Molding Calculator',
-        page_location: window.location.href,
-        page_path: window.location.pathname
-      });
-    };
-
-    // GA Tracking Functions
-    function trackPolymerSelection(polymerName) {
-      gtag('event', 'polymer_selection', {
-        event_category: 'Material',
-        event_label: polymerName,
-        value: 1
-      });
-    }
-    
-    function trackCalculation(result) {
-      const wall = parseFloat(document.getElementById('wall').value) || 0;
-      const weight = parseFloat(document.getElementById('weight').value) || 0;
-      const polymer = document.getElementById('polymer').value || 'Unknown';
-      
-      gtag('event', 'calculation', {
-        event_category: 'Usage',
-        event_label: 'CycleTimeCalculation',
-        value: result,
-        wall_thickness: wall,
-        part_weight: weight,
-        polymer_type: polymer
-      });
-    }
-
-    // Auto-fill properties
-    function setPolymerProperties() {
-      const selected = document.getElementById("polymer").value;
-      const poly = POLYMER_DATA.find(p => p.name === selected);
-      if (poly) {
-        document.getElementById('diffusivity').value = poly.diffusivity ?? "";
-        document.getElementById('meltTemp').value = poly.meltTemp ?? "";
-        document.getElementById('moldTemp').value = poly.moldTemp ?? "";
-        document.getElementById('ejectTemp').value = poly.ejectTemp ?? "";
-        
-        // Add active class to selected polymer
-        const cards = document.querySelectorAll('.polymer-card');
-        cards.forEach(card => {
-          card.classList.remove('active');
-          if (card.querySelector('span').textContent === poly.name) {
-            card.classList.add('active');
-          }
-        });
-      } else {
-        // Clear fields if no polymer selected
-        document.getElementById('diffusivity').value = "";
-        document.getElementById('meltTemp').value = "";
-        document.getElementById('moldTemp').value = "";
-        document.getElementById('ejectTemp').value = "";
-        
-        // Remove active class from all cards
-        const cards = document.querySelectorAll('.polymer-card');
-        cards.forEach(card => {
-          card.classList.remove('active');
-        });
-      }
-      
-      // Recalculate after setting properties
-      calculateCycleTime();
-    }
-
-    // Select polymer from card
-    function selectPolymer(name) {
-      document.getElementById("polymer").value = name;
-      setPolymerProperties();
-    }
-
-    // Set up auto-calculation
-    function setupAutoCalculation() {
-      // Get all input elements
-      const inputs = document.querySelectorAll('input, select');
-      
-      // Add event listeners to all inputs
-      inputs.forEach(input => {
-        input.addEventListener('input', calculateCycleTime);
-        input.addEventListener('change', calculateCycleTime);
-      });
-    }
-
-    // Calculate and update result
-    function calculateCycleTime() {
-      const wall       = parseFloat(document.getElementById('wall').value) || 0;
-      const weight     = parseFloat(document.getElementById('weight').value) || 0;
-      const cavities   = parseFloat(document.getElementById('cavities').value) || 0;
-      const complexity = document.getElementById('complexity').value;
-      const diffusivity= parseFloat(document.getElementById('diffusivity').value) || 0;
-      const meltTemp   = parseFloat(document.getElementById('meltTemp').value) || 0;
-      const moldTemp   = parseFloat(document.getElementById('moldTemp').value) || 0;
-      const ejectTemp  = parseFloat(document.getElementById('ejectTemp').value) || 0;
-
-      const PI = Math.PI;
-      const wallCapped = wall > 3.5 ? 3.5 : wall;
-
-      let pct = 0.90;
-      if (complexity === "medium") pct = 0.85;
-      if (complexity === "high") pct = 0.80;
-
-      try {
-        const termA = Math.pow(wallCapped, 2) / (PI * 2 * diffusivity);
-        const lnArg = (8 / Math.pow(PI, 2)) * ((meltTemp - moldTemp) / (ejectTemp - moldTemp));
-        const termB = Math.log(lnArg);
-
-        const coolingTime = 1.35 * termA * termB;
-        const injectionTime = 0.0151 * weight * cavities;
-        const base = coolingTime + injectionTime + 8.87;
-
-        let result = base / pct;
-        result = result > 0 ? Math.ceil(result) : 0;
-        
-        // Animation for result
-        const resultContainer = document.querySelector('.result-container');
-        resultContainer.style.animation = 'pulse 0.6s';
-        setTimeout(() => {
-          resultContainer.style.animation = '';
-        }, 600);
-        
-        // Update result
-        const resultElement = document.getElementById('cycleTime');
-        resultElement.textContent = isFinite(result) ? result : "0";
-        
-        // Track calculation event
-        trackCalculation(result);
-      } catch {
-        document.getElementById('cycleTime').innerText = "0";
-      }
-    }
-    
-    // Feedback functions
-    function toggleFeedbackForm() {
-      const form = document.getElementById('feedbackForm');
-      form.classList.toggle('expanded');
-      
-      // Clear any existing messages
-      const messageDisplay = document.getElementById('feedbackMessageDisplay');
-      messageDisplay.classList.remove('show', 'success', 'error');
-      messageDisplay.textContent = '';
-    }
-    
-    function submitFeedback() {
-      const name = document.getElementById('feedbackName').value;
-      const email = document.getElementById('feedbackEmail').value;
-      const message = document.getElementById('feedbackMessage').value;
-      
-      // Track form submission
-      gtag('event', 'feedback_submitted', {
-        name_provided: !!name,
-        email_provided: !!email,
-        character_count: message.length
-      });
-      
-      // Return true to allow form submission to Formspree
-      return true;
-    }
-
-    // Set up Formspree submission
-    function setupFormspree() {
-      const form = document.getElementById('feedback-form');
-      
-      form.addEventListener('submit', function(e) {
-        const message = document.getElementById('feedbackMessage').value;
-        const messageDisplay = document.getElementById('feedbackMessageDisplay');
-        
-        // Clear previous messages
-        messageDisplay.classList.remove('show', 'success', 'error');
-        
-        if (!message.trim()) {
-          e.preventDefault();
-          messageDisplay.textContent = 'Please enter your feedback before submitting';
-          messageDisplay.classList.add('show', 'error');
-          return;
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 0.8rem;
         }
         
-        // Show sending indicator
-        messageDisplay.textContent = 'Sending your feedback...';
-        messageDisplay.classList.add('show');
-      });
-      
-      // Handle Formspree response
-      form.addEventListener('submit', function(event) {
-        // Handle the response after form submission
-        setTimeout(function() {
-          const messageDisplay = document.getElementById('feedbackMessageDisplay');
-          
-          // This would normally be handled by Formspree's response
-          // For demo purposes, we'll assume success
-          messageDisplay.textContent = 'Thank you! Your feedback has been sent.';
-          messageDisplay.classList.add('show', 'success');
-          
-          // Clear form
-          document.getElementById('feedbackName').value = '';
-          document.getElementById('feedbackEmail').value = '';
-          document.getElementById('feedbackMessage').value = '';
-          
-          // Close form after 3 seconds
-          setTimeout(() => {
-            document.getElementById('feedbackForm').classList.remove('expanded');
-            setTimeout(() => {
-              messageDisplay.classList.remove('show');
-            }, 300);
-          }, 3000);
-        }, 1500);
-      });
-    }
-  </script>
+        .feedback-container {
+            margin-top: 25px;
+            text-align: center;
+        }
+        
+        .feedback-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3);
+        }
+        
+        .feedback-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(114, 9, 183, 0.4);
+        }
+        
+        .feedback-btn i {
+            margin-right: 8px;
+        }
+        
+        .feedback-form {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            margin-top: 15px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 16px;
+            padding: 0 20px;
+        }
+        
+        .feedback-form.expanded {
+            max-height: 500px;
+            padding: 20px;
+        }
+        
+        .feedback-form input,
+        .feedback-form textarea {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(100, 116, 139, 0.4);
+            color: white;
+            font-size: 0.9rem;
+            resize: vertical;
+        }
+        
+        .feedback-form textarea {
+            min-height: 120px;
+        }
+        
+        .feedback-form input:focus,
+        .feedback-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.3);
+        }
+        
+        .submit-feedback-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-feedback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(114, 9, 183, 0.4);
+        }
+        
+        .feedback-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .feedback-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .success {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4ade80;
+        }
+        
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+        
+        .privacy-notice {
+            color: #94a3b8;
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+        
+        .protection-banner {
+            background: rgba(178, 31, 31, 0.2);
+            border: 1px solid rgba(178, 31, 31, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .protection-banner h3 {
+            color: #ff7e5f;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            .input-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .polymer-selector {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .result-value {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container fade-in">
+        <div class="header">
+            <h1>Plastic Injection Molding Cycle Time Calculator</h1>
+            <p>Developed & Designed By Analytica India | www.analyticaindia.in</p>
+        </div>
+        
+        <div class="protection-banner">
+            <h3><i class="fas fa-shield-alt"></i> Source Code Protection Enabled</h3>
+            <p>This calculator is protected against unauthorized access and copying.</p>
+        </div> 
+
+        <!-- Polymer Quick Select at the top -->
+        <div class="polymer-selector">
+            <div class="polymer-card" onclick="selectPolymer('ABS'); trackPolymerSelection('ABS')">
+                <i class="fas fa-flask"></i>
+                <span>ABS</span>
+            </div>
+            <div class="polymer-card" onclick="selectPolymer('PP'); trackPolymerSelection('PP')">
+                <i class="fas fa-flask"></i>
+                <span>PP</span>
+            </div>
+            <div class="polymer-card" onclick="selectPolymer('Nylon'); trackPolymerSelection('Nylon')">
+                <i class="fas fa-flask"></i>
+                <span>Nylon</span>
+            </div>
+            <div class="polymer-card" onclick="selectPolymer('HDPE'); trackPolymerSelection('HDPE')">
+                <i class="fas fa-flask"></i>
+                <span>HDPE</span>
+            </div>
+            <div class="polymer-card" onclick="selectPolymer('TPE'); trackPolymerSelection('TPE')">
+                <i class="fas fa-flask"></i>
+                <span>TPE</span>
+            </div>
+            <div class="polymer-card" onclick="selectPolymer('ABS+PC'); trackPolymerSelection('ABS+PC')">
+                <i class="fas fa-flask"></i>
+                <span>ABS+PC</span>
+            </div>
+            <div class="polymer-card" onclick="selectPolymer('Delrin'); trackPolymerSelection('Delrin')">
+                <i class="fas fa-flask"></i>
+                <span>Delrin</span>
+            </div>
+        </div>
+
+        <!-- Result display below polymer buttons -->
+        <div class="result-container">
+            <div class="result-label">Total Cycle Time</div>
+            <div class="result-value"><span id="cycleTime">0</span> <span class="unit">seconds</span></div>
+        </div>
+
+        <!-- Input sections side by side -->
+        <div class="input-sections">
+            <div class="input-section">
+                <div class="section-title">
+                    <i class="fas fa-cube"></i>
+                    <span>Part Specifications</span>
+                </div>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="polymer"><i class="fas fa-vial"></i> Polymer</label>
+                        <select id="polymer" onchange="setPolymerProperties()" class="user-input">
+                            <option value="">-- Select Polymer --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="wall"><i class="fas fa-ruler-vertical"></i> Wall Thickness (mm)</label>
+                        <input id="wall" type="number" step="0.01" min="0" class="user-input" placeholder="e.g. 2.5">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="weight"><i class="fas fa-weight-hanging"></i> Part Weight (g)</label>
+                        <input id="weight" type="number" step="0.01" min="0" class="user-input" placeholder="e.g. 15.2">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="cavities"><i class="fas fa-object-group"></i> Cavity Count</label>
+                        <input id="cavities" type="number" step="1" min="1" class="user-input" placeholder="e.g. 4" value="1">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="complexity"><i class="fas fa-project-diagram"></i> Complexity</label>
+                        <select id="complexity" class="user-input">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-section">
+                <div class="section-title">
+                    <i class="fas fa-fire"></i>
+                    <span>Material Properties</span>
+                </div>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="diffusivity"><i class="fas fa-thermometer-half"></i> Thermal Diffusivity (mm²/s)</label>
+                        <input id="diffusivity" type="number" step="0.01" class="predefined-input" placeholder="Auto-filled" readonly>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="meltTemp"><i class="fas fa-temperature-high"></i> Melting Temp (°C)</label>
+                        <input id="meltTemp" type="number" step="1" class="predefined-input" placeholder="Auto-filled" readonly>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="moldTemp"><i class="fas fa-temperature-low"></i> Mold Temp (°C)</label>
+                        <input id="moldTemp" type="number" step="1" class="predefined-input" placeholder="Auto-filled" readonly>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="ejectTemp"><i class="fas fa-sign-out-alt"></i> Ejection Temp (°C)</label>
+                        <input id="ejectTemp" type="number" step="1" class="predefined-input" placeholder="Auto-filled" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-text">
+            <p><i class="fas fa-sync-alt"></i> Results update automatically as you change values</p>
+            <p><i class="fas fa-lightbulb"></i> Select a polymer to auto-fill material properties</p>
+            <p><i class="fas fa-shield-alt"></i> Source code protection enabled</p>
+        </div>
+        
+        <!-- Feedback Section -->
+        <div class="feedback-container">
+            <button class="feedback-btn" onclick="toggleFeedbackForm(); gtag('event', 'feedback_opened')">
+                <i class="fas fa-comment-alt"></i> Feedback/Suggestions
+            </button>
+            
+            <div class="feedback-form" id="feedbackForm">
+                <!-- Formspree form - Replace meozdgwy with your actual Formspree form ID -->
+                <form id="feedback-form" action="https://formspree.io/f/meozdgwy" method="POST">
+                    <input type="text" name="name" id="feedbackName" placeholder="Your Name (Optional)" 
+                           onfocus="gtag('event', 'feedback_name_focused')">
+                    
+                    <input type="email" name="email" id="feedbackEmail" placeholder="Email (Optional)" 
+                           onfocus="gtag('event', 'feedback_email_focused')">
+                    
+                    <textarea name="message" id="feedbackMessage" placeholder="Your feedback..." required
+                              onfocus="gtag('event', 'feedback_message_focused')"></textarea>
+                    
+                    <button type="submit" class="submit-feedback-btn" onclick="submitFeedback()">
+                        <i class="fas fa-paper-plane"></i> Submit Feedback
+                    </button>
+                </form>
+                <p class="privacy-notice">
+                    We use Google Analytics to improve this tool. No personal data is collected without your consent.
+                    Unauthorized copying of this calculator is prohibited.
+                </p>
+                <div class="feedback-message" id="feedbackMessageDisplay"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>sales@analyticaindia.in | Analytica India | Protected Calculator © 2023</p>
+        </div>
+    </div>
+
+    <!-- Obfuscated JavaScript -->
+    <script>
+        // Polymer data stored in encoded format
+        const _0x5a8d = ['ABS', 'ABS+PC', 'PP', 'HDPE', 'Nylon', 'TPE', 'Delrin'];
+        const _0x3c7f = [0.13, 0.13, 0.09, 0.13, 0.10, 0.09, 0.09];
+        const _0x2e9a = [260, 260, 218, 230, 291, 227, 215];
+        const _0x1b4d = [54, 54, 38, 38, 75, 60, 90];
+        const _0x4f6c = [84, 84, 70, 70, 129, 88, 167];
+        
+        // Initialize on load
+        window.onload = function() {
+            // Populate polymer dropdown
+            const sel = document.getElementById("polymer");
+            _0x5a8d.forEach((p, i) => {
+                const opt = document.createElement("option");
+                opt.value = p;
+                opt.textContent = p;
+                sel.appendChild(opt);
+            });
+            
+            // Set up event listeners for auto-calculation
+            document.querySelectorAll('input, select').forEach(input => {
+                input.addEventListener('input', calculateCycleTime);
+                input.addEventListener('change', calculateCycleTime);
+            });
+            
+            // Track initial page view
+            gtag('event', 'page_view', {
+                page_title: 'Injection Molding Calculator',
+                page_location: window.location.href,
+                page_path: window.location.pathname
+            });
+            
+            // Initialize source code protection
+            initProtection();
+        };
+        
+        // Source code protection initialization
+        function initProtection() {
+            // Disable right-click context menu
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            
+            // Disable keyboard shortcuts
+            document.addEventListener('keydown', e => {
+                // Disable Ctrl+U (View source)
+                if (e.ctrlKey && e.key === 'u') {
+                    e.preventDefault();
+                    alert('Source code viewing is disabled on this page');
+                }
+                
+                // Disable F12 (Developer Tools)
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                    alert('Developer tools are disabled on this page');
+                }
+                
+                // Disable Ctrl+Shift+I (Developer Tools)
+                if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                    e.preventDefault();
+                    alert('Developer tools are disabled on this page');
+                }
+                
+                // Disable Ctrl+S (Save page)
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    alert('Page saving is disabled');
+                }
+            });
+        }
+
+        // GA Tracking Functions
+        function trackPolymerSelection(polymerName) {
+            gtag('event', 'polymer_selection', {
+                event_category: 'Material',
+                event_label: polymerName,
+                value: 1
+            });
+        }
+        
+        function trackCalculation(result) {
+            const wall = parseFloat(document.getElementById('wall').value) || 0;
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
+            const polymer = document.getElementById('polymer').value || 'Unknown';
+            
+            gtag('event', 'calculation', {
+                event_category: 'Usage',
+                event_label: 'CycleTimeCalculation',
+                value: result,
+                wall_thickness: wall,
+                part_weight: weight,
+                polymer_type: polymer
+            });
+        }
+
+        // Auto-fill properties
+        function setPolymerProperties() {
+            const selected = document.getElementById("polymer").value;
+            const index = _0x5a8d.indexOf(selected);
+            
+            if (index !== -1) {
+                document.getElementById('diffusivity').value = _0x3c7f[index];
+                document.getElementById('meltTemp').value = _0x2e9a[index];
+                document.getElementById('moldTemp').value = _0x1b4d[index];
+                document.getElementById('ejectTemp').value = _0x4f6c[index];
+                
+                // Add active class to selected polymer
+                document.querySelectorAll('.polymer-card').forEach((card, i) => {
+                    card.classList.toggle('active', card.querySelector('span').textContent === selected);
+                });
+            } else {
+                // Clear fields if no polymer selected
+                ['diffusivity', 'meltTemp', 'moldTemp', 'ejectTemp'].forEach(id => {
+                    document.getElementById(id).value = "";
+                });
+                
+                // Remove active class from all cards
+                document.querySelectorAll('.polymer-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+            }
+            
+            // Recalculate after setting properties
+            calculateCycleTime();
+        }
+
+        // Select polymer from card
+        function selectPolymer(name) {
+            document.getElementById("polymer").value = name;
+            setPolymerProperties();
+        }
+
+        // Calculate and update result
+        function calculateCycleTime() {
+            const wall = parseFloat(document.getElementById('wall').value) || 0;
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
+            const cavities = parseFloat(document.getElementById('cavities').value) || 0;
+            const complexity = document.getElementById('complexity').value;
+            const diffusivity = parseFloat(document.getElementById('diffusivity').value) || 0;
+            const meltTemp = parseFloat(document.getElementById('meltTemp').value) || 0;
+            const moldTemp = parseFloat(document.getElementById('moldTemp').value) || 0;
+            const ejectTemp = parseFloat(document.getElementById('ejectTemp').value) || 0;
+
+            const PI = Math.PI;
+            const wallCapped = wall > 3.5 ? 3.5 : wall;
+
+            let pct = 0.90;
+            if (complexity === "medium") pct = 0.85;
+            if (complexity === "high") pct = 0.80;
+
+            try {
+                const termA = Math.pow(wallCapped, 2) / (PI * 2 * diffusivity);
+                const lnArg = (8 / Math.pow(PI, 2)) * ((meltTemp - moldTemp) / (ejectTemp - moldTemp));
+                const termB = Math.log(lnArg);
+
+                const coolingTime = 1.35 * termA * termB;
+                const injectionTime = 0.0151 * weight * cavities;
+                const base = coolingTime + injectionTime + 8.87;
+
+                let result = base / pct;
+                result = result > 0 ? Math.ceil(result) : 0;
+                
+                // Animation for result
+                document.querySelector('.result-container').style.animation = 'pulse 0.6s';
+                setTimeout(() => {
+                    document.querySelector('.result-container').style.animation = '';
+                }, 600);
+                
+                // Update result
+                document.getElementById('cycleTime').textContent = isFinite(result) ? result : "0";
+                
+                // Track calculation event
+                trackCalculation(result);
+            } catch {
+                document.getElementById('cycleTime').innerText = "0";
+            }
+        }
+        
+        // Feedback functions
+        function toggleFeedbackForm() {
+            document.getElementById('feedbackForm').classList.toggle('expanded');
+            document.getElementById('feedbackMessageDisplay').classList.remove('show', 'success', 'error');
+            document.getElementById('feedbackMessageDisplay').textContent = '';
+        }
+        
+        function submitFeedback() {
+            const name = document.getElementById('feedbackName').value;
+            const email = document.getElementById('feedbackEmail').value;
+            const message = document.getElementById('feedbackMessage').value;
+            
+            // Track form submission
+            gtag('event', 'feedback_submitted', {
+                name_provided: !!name,
+                email_provided: !!email,
+                character_count: message.length
+            });
+            
+            return true;
+        }
+    </script>
 </body>
 </html>
